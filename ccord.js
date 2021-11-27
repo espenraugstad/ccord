@@ -10,12 +10,12 @@ const cHeight = cvs.height;
 
 // Range of coordinate axes
 const range = {
-  xMin: -10,
+  xMin: -5,
   xMax: 10,
-  xTics: 10,
+  xTics: 2,
   yMin: -5,
   yMax: 10,
-  yTics: 10,
+  yTics: 1,
 };
 
 /* RUN SEQUENCE */
@@ -29,10 +29,11 @@ drawAxes();
 
 function drawAxes() {
   // Get origin
-  [xOrigin, yOrigin] = calculateOrigin();
+  [xOrigin, yOrigin, xUnit, yUnit] = calculateOrigin();
 
   // Draw coordinate axes
   ctx.strokeStyle = "white";
+  ctx.lineWidth = 1;
 
   // x - axis:
   ctx.beginPath();
@@ -51,6 +52,33 @@ function drawAxes() {
   ctx.moveTo(xOrigin, 0);
   ctx.lineTo(xOrigin, cHeight);
   ctx.stroke();
+
+  // Tics
+  ctx.lineWidth = 3;
+
+  // x - axis
+  let xTic = 0;
+  while (xTic <= cWidth) {
+    if (Math.abs(xTic - xOrigin) > Math.pow(1, -10)) {
+      ctx.beginPath();
+      ctx.moveTo(xTic, yOrigin - 5);
+      ctx.lineTo(xTic, yOrigin + 5);
+      ctx.stroke();
+    }
+    xTic += xUnit;
+  }
+
+  // y - axis
+  let yTic = 0;
+  while (yTic <= cHeight) {
+    if (Math.abs(yTic - yOrigin) > Math.pow(1, -10)) {
+      ctx.beginPath();
+      ctx.moveTo(xOrigin - 5, yTic);
+      ctx.lineTo(xOrigin + 5, yTic);
+      ctx.stroke();
+    }
+    yTic += yUnit;
+  }
 }
 
 function calculateOrigin() {
@@ -59,7 +87,6 @@ function calculateOrigin() {
 
   // Pixels/unit - x-axis
   const xPixelsPerUnit = cWidth / xRange;
-  console.log(xPixelsPerUnit);
 
   // Pixels to origin
   const xOrigin = (0 - range.xMin) * xPixelsPerUnit;
@@ -73,7 +100,7 @@ function calculateOrigin() {
   // Pixels to origin
   const yOrigin = range.yMax * yPixelsPerUnit;
 
-  return [xOrigin, yOrigin];
+  return [xOrigin, yOrigin, xPixelsPerUnit, yPixelsPerUnit];
 }
 
 function clearCanvas() {
