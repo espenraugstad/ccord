@@ -65,7 +65,7 @@ function drawAxes() {
       ctx.lineTo(xTic, yOrigin + 5);
       ctx.stroke();
     }
-    xTic += xUnit;
+    xTic += xUnit * range.xTics;
   }
 
   // y - axis
@@ -77,7 +77,7 @@ function drawAxes() {
       ctx.lineTo(xOrigin + 5, yTic);
       ctx.stroke();
     }
-    yTic += yUnit;
+    yTic += yUnit * range.yTics;
   }
 }
 
